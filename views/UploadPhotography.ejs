@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("Header"); -%>
+
+<body>
+
+    <%- include("Navbar",{login:login}); -%>
+
+    <!-- masseges -->
+    <div class="col-11 col-md-10 col-lg-8 mx-auto">
+        <% if(status==0){ %>
+        <div class="my-3 py-3 alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==1){ %>
+        <div class="my-3 py-3 alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==2){ %>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none1" role="alert">
+            <strong id="req">Pls Select Image :( </strong>
+        </div>
+    </div>
+    <!-- masseges -->
+    <!-- Form -->
+    <div class="col-11 col-md-10 col-lg-8 mx-auto">
+        <section class="section-preview">
+            <form class="mx-auto md-form my-3" action="<%- uploadRoutes %>uploadImg" id="uploadForm" method="POST"
+                enctype="multipart/form-data">
+                <div class="mx-auto file-field">
+                    <div class="col-10 row">
+                        <div class="btn btn-primary btn-sm float-left waves-effect waves-light">
+                            <span>
+                                <%- PhotoType %>
+                            </span>
+                            <input type="file" class="imgCon" id="file" name="file">
+                        </div>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input readonly class="file-path validate valid" value="<%- PhotoType %>" type="text"
+                            placeholder="Upload your file">
+                    </div>
+                </div><br>
+                <div class="ml-5">
+                    <input type="submit" class="px-3 btn btn-primary" id="UploadImg" value="<%- PhotoType %>">
+                </div>
+            </form>
+        </section>
+        <!-- Form -->
+        <div>
+            <p>Wedding Discription :-</p>
+            <div class="input-group form-group">
+                <textarea class="form-control" rows="5" id="comment" name="imgDis"></textarea>
+            </div>
+            <div class="my-3 py-3 alert alert-dismissible fade show d-none" id="none2" role="alert">
+                <strong id="req1"></strong>
+            </div>
+            <div class="col-12 row">
+                <button id="postDiscript" class="btn-md px-3 btn btn-primary"><%- PhotoType %></button>
+                <button id="resetText" class="btn-md px-3 btn btn-primary">Reset Text</button>
+            </div>
+        </div>
+    </div>
+    <!-- Image grid -->
+    <div class=" dark">
+        <div class="col-10 mx-auto">
+            <p style="text-align: center;">-------------------------------------------------------------
+            </p>
+            <h1 class="py-3" style="text-align: center;"><%- Dipart %></h1>
+            <p style="text-align: center;">-------------------------------------------------------------
+            </p>
+        </div>
+        <div class="col-12 col-md-10 col-lg-9 col-xl-9 mx-auto">
+            <div class="row">
+                <% imgData.map(img => { %>
+                <div class="col-4 p-1 border">
+                    <img class="my-auto m-auto w-100" src="<%- imgRoutes %><%- img %>" alt="Wedding Img">
+                    <p style="text-align: center;">
+                        _________________</p>
+                    <a href="<%- uploadRoutes %>deleteImg?id=<%- img %>"><i class="fa fa-trash" aria-hidden="true"></i>
+                        Delete
+                        Image</a>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+    <!-- Image grid -->
+    <!-- Footer -->
+    <%- include("Footer"); -%>
+</body>
+
+<script>
+    $(document).ready(function () {
+        console.log("redy");
+
+        $('#uploadForm').on('submit', function (e) {
+            // e.preventDefault();
+            const vlid = $("#file").val();
+            console.log(vlid);
+            if (vlid === "") {
+                $('#none1').addClass('d-block');
+                hidemsg();
+            } else {
+                return true;
+            }
+            return false;
+        });
+
+        function hidemsg() {
+            setTimeout(function () {
+                $("#none1").removeClass('d-block');
+            }, 2000);
+        }
+
+
+        $(".imgCon").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(".valid").addClass("selected").val(fileName);
+        });
+
+        $('#resetText').on('click', function (e) {
+            $.ajax({
+                url: "<%- uploadRoutes %>getdiscript",
+                method: "get",
+                success: function (data) {
+                    if (data.status === "1") {
+                        $("#comment").val(data.data);
+                    } else {
+                        $("#comment").val(data.data);
+                    }
+                }
+            });
+
+        });
+
+        $.ajax({
+            url: "<%- uploadRoutes %>getdiscript",
+            method: "get",
+            success: function (data) {
+                console.log(data);
+                if (data.status === "1") {
+                    $("#comment").val(data.data);
+                } else {
+                    $("#comment").val(data.data);
+                }
+            }
+        });
+
+        $('#postDiscript').on('click', function (e) {
+            const Discript = $("#comment").val();
+            if (Discript === "") {
+                $('#none2').addClass('d-block alert-warning');
+                showMsg("Write Some Lines");
+            } else {
+                if (Discript.length >= 50) {
+                    $.ajax({
+                        url: "<%- uploadRoutes %>/postdiscript",
+                        method: "post",
+                        data: {
+                            discript: Discript
+                        },
+                        success: function (data) {
+                            if (data.status === "1") {
+                                $("#comment").val(data.data);
+                                $('#none2').addClass('d-block alert-success');
+                                showMsg(data.msg);
+                            } else {
+                                $("#comment").val(data.data);
+                                $('#none2').addClass('d-block alert-danger');
+                                showMsg(data.msg);
+                            }
+                        }
+                    })
+                } else {
+                    $('#none2').addClass('d-block alert-warning');
+                    showMsg("Must Length 50 Character");
+                }
+            }
+        });
+        function showMsg(msg) {
+            $("#req1").text(msg);
+            setTimeout(function () {
+                $("#none2").removeClass('d-block alert-warning');
+            }, 2000);
+        }
+    });
+    // $(document).ready(function () {
+    //     $('#uploadForm').on('submit', function (e) {
+    //         e.preventDefault();
+    //         $.ajax({
+    //             url: "/wedding",
+    //             type: "POST",
+    //             data: new FormData(this),
+    //             contentType: false,
+    //             processData: false,
+    //             success: function (data) {
+    //                 console.log(data);
+    //             }
+    //         });
+    //     });
+    // });
+</script>
+
+</html>

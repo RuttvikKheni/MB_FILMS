@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("Header"); -%>
+
+<body>
+    <%- include("Navbar",{login:login}); -%>
+
+
+    <div class="col-11 col-md-11 col-lg-10 mx-auto">
+        <!-- masseges -->
+        <div class="col-12 col-md-10 col-lg-8 mx-auto">
+            <% if(status==0){ %>
+            <div class="my-3 py-3 alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><%- mass %></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% }else if(status==1){ %>
+            <div class="my-3 py-3 alert alert-success alert-dismissible fade show" role="alert">
+                <strong><%- mass %></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% }else if(status==2){ %>
+            <div class="my-3 py-3 alert alert-warning alert-dismissible fade show" role="alert">
+                <strong><%- mass %></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% } %>
+            <div class="my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none" role="alert">
+                <strong>Pls Select Image :( </strong>
+            </div>
+        </div>
+        <!-- masseges -->
+
+        <!-- Home Page Data -->
+        <div>
+            <p style="text-align: center;">__________________________________________</p>
+            <h1 style="text-align: center;">Home Page Imgs</h1>
+            <p style="text-align: center;">__________________________________________</p>
+        </div>
+        <div class="mx-auto">
+            <div class="btn btn-primary">
+                <a style="text-decoration: none;color:antiquewhite;" href="/profile/addImg">Add Images</a>
+            </div>
+            <div class="btn btn-primary">
+                <a style="text-decoration: none;color:antiquewhite;" id="redHome">Refrash Home
+                    Page</a>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="col-12 col-md-11 col-lg-10 mx-auto table table-hover" id="imgTable">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Image Name</th>
+                <th scope="col">Image Category</th>
+                <th scope="col">Update Images and Details</th>
+                <th scope="col">Delete Imgs</th>
+                <th scope="col">Images</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% imgName.forEach(element => { %>
+            <tr>
+                <th scope="row"><%- count %>
+                </th>
+                <td></i><%- element %></td>
+                <td><%- imgData[count++] %></td>
+                <td><a href="/profile/UpdateImg?id=<%- element %>">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td><a id="deleteImg" href="<%- element %>">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="w-25">
+                    <a href="http://localhost:3000/public/Profile/Home/<%- element %>" target="_blank">
+                        <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                        <img class="w-100" src="http://localhost:<%- port %>/public/Profile/Home/<%- element %>" alt="">
+                    </a>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+
+    <!-- Home Page Data -->
+
+
+
+
+    <%- include("Footer"); -%>
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        console.log("redy");
+
+
+        jQuery('#deleteImg').on('click', function (e) {
+            e.preventDefault();
+
+            var $row = jQuery(this).closest('tr');
+            var $columns = $row.find('td');
+
+            $columns.addClass('row-highlight');
+            var values = "";
+
+            jQuery.each($columns, function (i, item) {
+                values = values + 'td' + (i + 1) + ':' + item.innerHTML + '<br/>';
+                alert(values);
+            });
+            console.log(values);
+        });
+
+        $("#redHome").click(function () {
+            window.location.replace("/profile");
+        });
+
+        // .click(function (e) {
+        //         e.preventDefault();
+        //         console.log($(this).attr('href'));
+        //     })
+        // var td = $('#imgTable').find('#deleteImg').attr('href');
+        // console.log(td);
+
+
+    });
+
+</script>
+
+</html>

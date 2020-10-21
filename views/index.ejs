@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("Header"); -%>
+
+<body>
+    <%- include("Navbar",{login:login}); -%>
+
+    <!-- masseges -->
+    <div class="col-11 col-md-10 col-lg-8 mx-auto">
+
+        <% if(status==0){ %>
+        <div class="my-3 py-3 alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==1){ %>
+        <div class="my-3 py-3 alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==2){ %>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+    <!-- masseges -->
+    <div class="col-md-10 col-lg-8 mx-auto">
+        <form action="/" method="POST" class='p-2 my-5 border'>
+            <div class="border" style="text-align: center;margin: 7px;padding: 5px;">
+                <img src="https://instagram.fstv7-1.fna.fbcdn.net/v/t51.2885-19/s150x150/121601704_357417062263023_4629664118135468031_n.jpg?_nc_ht=instagram.fstv7-1.fna.fbcdn.net&_nc_ohc=apM2YpJfHQEAX8ld_ky&oh=0d939830a180ea0356eda9ed2257486f&oe=5FB25E16"
+                    alt="Avatar" class="avatar">
+            </div>
+            <div class="form-group">
+                <label for="uname">Email address</label>
+                <input autocomplete="off" type="text" class="form-control" id="uname" name="email">
+                <small id="emailHelp" class="form-text text-muted">*Required</small>
+            </div>
+            <div class="form-group">
+                <label for="psw">Password</label>
+                <input type="password" class="form-control" id="psw" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="Submit(event)">Submit</button>
+            <button type="reset" class="btn btn-primary">Reset</button>
+            <div class=" col-10 p-2 mx-auto" style="background-color:#f1f1f1">
+                <p class="psw">Forgot <a href="#">password?</a></p>
+            </div>
+        </form>
+    </div>
+
+
+    <%- include("Footer"); -%>
+</body>
+<script>
+    // function User() {
+    //     var email = document.getElementById('uname').value;
+    //     console.log(email);
+    //     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    //     if (email.match(reg)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    // function Password() {
+    //     var password = document.getElementById('psw').value;
+    //     console.log(password);
+    //     var reg = /[0-9]/g;
+    //     // 1 captital 1 digit 1 lower min 8 max 12
+    //     if (password.length >= 8 && password.length <= 12) {
+    //         console.log('done');
+    //         if (password.match(reg)) {
+    //             console.log("psw");
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    // function Submit(e) {
+    //     e.preventDefault();
+    //     if (User() && Password()) {
+    //         console.log("success");
+    //     } else {
+    //         console.log();
+    //         console.log("error");
+
+    //     }
+    // }
+</script>
+
+</html>

@@ -1,0 +1,43 @@
+<nav class="col-11 col-sm-10 col-md-10 col-lg-8 col-xl-8 mx-auto navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">MB_FILMS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto p-3">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">About Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/wedding">Weddings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/prewedding">PreWeddings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/kidsshoots">KidsShoot'S</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/familyshoots">FamilyShoot's</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact Detail</a>
+            </li>
+            <% if(login===false){ %>
+            <li class="nav-item">
+                <a class="nav-link" href="/">LogIN</a>
+            </li>
+            <% }else{ %>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">LogOUT</a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>

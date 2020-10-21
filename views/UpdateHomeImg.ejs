@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("Header"); -%>
+
+
+<body>
+
+    <%- include("Navbar",{login:login}); -%>
+
+    <div>
+        <p style="text-align: center;">_______________________________________________________</p>
+        <h1 style="text-align: center;">Update Home Page Imgs</h1>
+        <p style="text-align: center;">_______________________________________________________</p>
+    </div>
+    <!-- masseges -->
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+        <% if(status==0){ %>
+        <div class="my-3 py-3 alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==1){ %>
+        <div class="my-3 py-3 alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% }else if(status==2){ %>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show" role="alert">
+            <strong><%- mass %></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none" role="alert">
+            <strong>Pls Select Image :( </strong>
+        </div>
+    </div>
+    <!-- masseges -->
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+
+        <div class="my-3 py-2 alert alert-warning alert-dismissible fade show d-none" id="none1" role="alert">
+            <strong id="req"></strong>
+        </div>
+    </div>
+    <!-- masseges -->
+
+
+    <!-- Form -->
+
+    <div class="col-11 col-md-10 col-lg-8 mx-auto">
+
+
+        <section class="section-preview">
+
+            <form class="md-form my-3" id="uploadForm" enctype="multipart/form-data">
+                <div class="file-field">
+                    <div class="btn btn-primary btn-sm float-left waves-effect waves-light">
+                        <span>Choose file</span>
+                        <input class="imgCon" id="fileImg" name="fileImg" type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input readonly class="file-path validate valid" type="text" placeholder="Upload your file">
+                    </div>
+                    <div class="p-3">
+                        For This Image :- <input class="w-100" id="imgData" name="imgData" type="text"
+                            value="<%- updateImg.split('|')[1] %>">
+                    </div>
+                    <div class="p-3">
+                        Image :- <input readonly class="w-100" id="imgName" name="imgName" type="text"
+                            value="<%- updateImg.split('|')[0] %>"><a target="_blank"
+                            href="http://localhost:<%- port %>/public/profile/home/<%- updateImg.split('|')[0] %>">See
+                            Image</a>
+                    </div>
+                    <div class="pb-5">
+                        <input type="submit" class="px-3 btn btn-primary" id="UploadImg" value="Add Image">
+                        <input type="button" class="px-3 btn btn-primary" id="redHome" value="Goto Home Page">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Form -->
+
+
+
+    <%- include("Footer"); -%>
+
+</body>
+<script>
+    $(document).ready(function () {
+        console.log("redy");
+
+
+        $('#uploadForm').on('submit', function (e) {
+            e.preventDefault();
+            const valid = $("#fileImg").val();
+            if (valid === "") {
+                $('#none1').addClass('d-block alert-warning');
+                hidemsg("Fill All Detail :( ");
+                valid.focus();
+            } else {
+                if ($('#imgData').val() == "") {
+                    $('#none1').addClass('d-block');
+                    $("#imgData").focus()
+                    hidemsg("Write Some Discription");
+                } else {
+                    $.ajax({
+                        method: "POST",
+                        url: "/profile/updateImg",
+                        data: new FormData(this),
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.status == "1") {
+                                $('#none1').removeClass('alert-warning');
+                                $('#none1').addClass('d-block alert alert-success');
+                                hidemsg(data.msg);
+                            } else {
+                                $('#none1').addClass('d-block alert-danger');
+                                hidemsg(`Image Not Upload(Err:${data.msg})`);
+                            }
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        function hidemsg(msg) {
+            $('#req').text(msg);
+            setTimeout(function () {
+                $("#none1").removeClass('d-block');
+            }, 3000);
+        }
+
+        $("#redHome").click(function () {
+            window.location.replace("/profile");
+        });
+
+
+        $(".imgCon").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(".valid").addClass("selected").val(fileName);
+        });
+    });
+
+</script>
+
+</html>

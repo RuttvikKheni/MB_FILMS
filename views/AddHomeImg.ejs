@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("Header"); -%>
+
+
+<body>
+
+    <%- include("Navbar",{login:login}); -%>
+
+    <div>
+        <p style="text-align: center;">_______________________________________________________</p>
+        <h1 style="text-align: center;">Add Home Page Imgs</h1>
+        <p style="text-align: center;">_______________________________________________________</p>
+    </div>
+
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+
+        <div class="my-3 py-2 alert alert-warning alert-dismissible fade show d-none" id="none1" role="alert">
+            <strong id="req"></strong>
+        </div>
+    </div>
+    <!-- masseges -->
+
+
+    <!-- Form -->
+
+    <div class="col-11 col-md-10 col-lg-8 mx-auto">
+
+
+        <section class="section-preview">
+
+            <form class="md-form my-3" id="uploadForm" enctype="multipart/form-data">
+                <div class="file-field">
+                    <div class="btn btn-primary btn-sm float-left waves-effect waves-light">
+                        <span>Choose file</span>
+                        <input class="imgCon" id="file" name="fileImg" type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input readonly class="file-path validate valid" type="text" placeholder="Upload your file">
+                    </div>
+                    <div class="p-3">
+                        For This Image :- <input class="w-100" id="imgData" name="imgData" type="text">
+                    </div>
+                    <div class="pb-5">
+                        <input type="submit" class="px-3 btn btn-primary" id="UploadImg" value="Add Image">
+                        <input type="button" class="px-3 btn btn-primary" id="redHome" value="Goto Home Page">
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Form -->
+
+    <!-- Img -->
+    <div class="col-8 mx-auto border d-none" id="imgShow">
+        <div class="my-auto">
+            <img id="img" class="w-75" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Img -->
+
+
+    <%- include("Footer"); -%>
+
+</body>
+<script>
+    $(document).ready(function () {
+        console.log("redy");
+
+
+        $('#uploadForm').on('submit', function (e) {
+            e.preventDefault();
+            const valid = $("#file").val();
+            if (valid === "") {
+                $('#imgShow').addClass('d-none');
+                $('#none1').addClass('d-block alert-warning');
+                hidemsg("Fill All Detail :( ");
+            } else {
+
+                if ($('#imgData').val() == "") {
+                    $('#none1').addClass('d-block');
+                    $("#imgData").focus()
+                    hidemsg("Write Some Discription");
+                } else {
+                    $.ajax({
+                        method: "POST",
+                        url: "/profile/addImg",
+                        data: new FormData(this),
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data.status == "1") {
+                                $('#none1').removeClass('alert-warning');
+                                $('#none1').addClass('d-block alert alert-success');
+                                hidemsg(`Image Upload SuccessFully`);
+                                $("#img").attr('src', "http://localhost:3000/public/Profile/Home/" + data.imgName);
+                                $('#imgShow').removeClass('d-none');
+                            } else {
+                                $('#none1').addClass('d-block alert-danger');
+                                hidemsg(`Image Not Upload(Err:${data.error})`);
+                            }
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        function hidemsg(msg) {
+            $('#req').text(msg);
+            setTimeout(function () {
+                $("#none1").removeClass('d-block');
+            }, 3000);
+        }
+
+        $("#redHome").click(function () {
+            window.location.replace("/profile");
+        });
+
+        $(".imgCon").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(".valid").addClass("selected").val(fileName);
+        });
+    });
+
+</script>
+
+</html>
