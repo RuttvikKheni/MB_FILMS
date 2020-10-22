@@ -40,7 +40,7 @@ Routes.get("/", (req, res) => {
             status: null,
             PhotoType: "Upload To Wedding",
             uploadRoutes: "/wedding/",
-            imgRoutes: `http://localhost:${port}/public/Wedding/`,
+            imgRoutes: `/public/Wedding/`,
             imgData: data,
             Dipart: "Weddings Images"
         });
@@ -59,7 +59,7 @@ Routes.post("/uploadImg", (req, res) => {
                 mass: msg ? msg : "File Uploaded :)",
                 PhotoType: "Upload To Wedding",
                 uploadRoutes: "/wedding/",
-                imgRoutes: `http://localhost:${port}/public/Wedding/`,
+                imgRoutes: `/public/Wedding/`,
                 imgData: data,
                 Dipart: "Weddings Images"
             });
@@ -79,7 +79,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Already Deleted :)",
                     PhotoType: "Upload To Wedding",
                     uploadRoutes: "/wedding/",
-                    imgRoutes: `http://localhost:${port}/public/Wedding/`,
+                    imgRoutes: `/public/Wedding/`,
                     imgData: data,
                     Dipart: "Weddings Images"
                 });
@@ -94,7 +94,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Deleted :)",
                     PhotoType: "Upload To Wedding",
                     uploadRoutes: "/wedding/",
-                    imgRoutes: `http://localhost:${port}/public/Wedding/`,
+                    imgRoutes: `/public/Wedding/`,
                     imgData: data,
                     Dipart: "Weddings Images"
                 });

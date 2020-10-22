@@ -76,7 +76,7 @@
                 success: function (data) {
                     if (data.status == 1) {
                         $("#valid").addClass("selected").val(data.imgName);
-                        $('#adminImg').attr('src', `http://192.168.0.7:3000/public/Profile/Admin/${data.imgName}`);
+                        $('#adminImg').attr('src', `/public/Profile / Admin / ${data.imgName}`);
                         window.location.replace("/about");
                     } else {
                     }
@@ -95,7 +95,7 @@
         //     method: 'post',
         //     url: 'admin',
         //     success: function (data) {
-        //         $('#adminImg').attr('src', `http://192.168.0.7:3000/Public/profile/Admin/${data[0]}`);
+        //         $('#adminImg').attr('src', `/Public/profile/Admin/${data[0]}`);
         //     }
         // });
 
@@ -105,7 +105,7 @@
         //         method: 'post',
         //         url: 'admin/updateImg',
         //         success: function (data) {
-        //             $('#adminImg').attr('src', `http://192.168.0.7:3000/Public/profile/Admin/${data[0]}`);
+        //             $('#adminImg').attr('src', `/Public/profile/Admin/${data[0]}`);
         //         }
         //     });
         // });

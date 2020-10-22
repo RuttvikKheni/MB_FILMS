@@ -41,7 +41,7 @@ Routes.get("/", (req, res) => {
             status: null,
             PhotoType: "Upload To Kids Shoots",
             uploadRoutes: "/kidsshoots/",
-            imgRoutes: `http://localhost:${port}/public/KidsShoots/`,
+            imgRoutes: `/public/KidsShoots/`,
             imgData: data,
             Dipart: "KidsShoots Images"
         });
@@ -57,7 +57,7 @@ Routes.post("/uploadImg", (req, res) => {
                 mass: msg ? msg : "File Uploaded :)",
                 PhotoType: "Upload To Kids Shoots",
                 uploadRoutes: "/kidsshoots/",
-                imgRoutes: `http://localhost:${port}/public/KidsShoots/`,
+                imgRoutes: `/public/KidsShoots/`,
                 imgData: data,
                 Dipart: "KidsShoots Images"
             });
@@ -77,7 +77,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Already Deleted :)",
                     PhotoType: "Upload To Kids Shoots",
                     uploadRoutes: "/kidsshoots/",
-                    imgRoutes: `http://localhost:${port}/public/KidsShoots/`,
+                    imgRoutes: `/public/KidsShoots/`,
                     imgData: data,
                     Dipart: "KidsShoots Images"
                 });
@@ -92,7 +92,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Deleted :)",
                     PhotoType: "Upload To Kids Shoots",
                     uploadRoutes: "/kidsshoots/",
-                    imgRoutes: `http://localhost:${port}/public/KidsShoots/`,
+                    imgRoutes: `/public/KidsShoots/`,
                     imgData: data,
                     Dipart: "KidsShoots Images"
                 });

@@ -41,7 +41,7 @@ Routes.get("/", (req, res) => {
             status: null,
             PhotoType: "Upload To Family Shoots",
             uploadRoutes: "/familyshoots/",
-            imgRoutes: `http://localhost:${port}/public/FamilyShoots/`,
+            imgRoutes: `/public/FamilyShoots/`,
             imgData: data,
             Dipart: "FamilyShoots Images"
         });
@@ -58,7 +58,7 @@ Routes.post("/uploadImg", (req, res) => {
                 mass: msg ? msg : "File Uploaded :)",
                 PhotoType: "Upload To Family Shoots",
                 uploadRoutes: "/familyshoots/",
-                imgRoutes: `http://localhost:${port}/public/FamilyShoots/`,
+                imgRoutes: `/public/FamilyShoots/`,
                 imgData: data,
                 Dipart: "FamilyShoots Images"
             });
@@ -78,7 +78,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Already Deleted :)",
                     PhotoType: "Upload To Family Shoots",
                     uploadRoutes: "/familyshoots/",
-                    imgRoutes: `http://localhost:${port}/public/FamilyShoots/`,
+                    imgRoutes: `/public/FamilyShoots/`,
                     imgData: data,
                     Dipart: "FamilyShoots Images"
                 });
@@ -93,7 +93,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Deleted :)",
                     PhotoType: "Upload To Family Shoots",
                     uploadRoutes: "/familyshoots/",
-                    imgRoutes: `http://localhost:${port}/public/FamilyShoots/`,
+                    imgRoutes: `/public/FamilyShoots/`,
                     imgData: data,
                     Dipart: "FamilyShoots Images"
                 });

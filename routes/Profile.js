@@ -175,7 +175,7 @@ Routes.post("/updateImg", (req, res) => {
             console.log(obj);
             res.send(obj)
         } else {
-            HomeImg.findOneAndUpdate({ imgName: req.body.imgName }, { imgName: req.file.filename, imgData: req.body.imgData }, (err, result) => {
+            homeImg.findOneAndUpdate({ imgName: req.body.imgName }, { imgName: req.file.filename, imgData: req.body.imgData }, (err, result) => {
                 if (err) {
                     obj = {};
                     obj['status'] = 0;
@@ -213,11 +213,5 @@ Routes.get("/deleteImg?:id", (req, res) => {
     console.log(req.query);
     res.end("end");
 });
-
-
-
-
-
-
 
 module.exports = Routes;

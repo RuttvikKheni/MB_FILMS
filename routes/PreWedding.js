@@ -41,7 +41,7 @@ Routes.get("/", (req, res) => {
             login: true,
             PhotoType: "Upload To PreWedding",
             uploadRoutes: "/prewedding/",
-            imgRoutes: `http://localhost:${port}/public/PreWedding/`,
+            imgRoutes: `/public/PreWedding/`,
             imgData: data,
             Dipart: "PreWeddings Images"
         });
@@ -57,7 +57,7 @@ Routes.post("/uploadImg", (req, res) => {
                 mass: msg ? msg : "File Uploaded :)",
                 PhotoType: "Upload To PreWedding",
                 uploadRoutes: "/prewedding/",
-                imgRoutes: `http://localhost:${port}/public/PreWedding/`,
+                imgRoutes: `/public/PreWedding/`,
                 imgData: data,
                 Dipart: "PreWeddings Images"
             });
@@ -77,7 +77,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Already Deleted :)",
                     PhotoType: "Upload To PreWedding",
                     uploadRoutes: "/prewedding/",
-                    imgRoutes: `http://localhost:${port}/public/PreWedding/`,
+                    imgRoutes: `/public/PreWedding/`,
                     imgData: data,
                     Dipart: "PreWeddings Images"
                 });
@@ -92,7 +92,7 @@ Routes.get("/deleteImg?:id", (req, res) => {
                     mass: "Img Deleted :)",
                     PhotoType: "Upload To PreWedding",
                     uploadRoutes: "/prewedding/",
-                    imgRoutes: `http://localhost:${port}/public/PreWedding/`,
+                    imgRoutes: `/public/PreWedding/`,
                     imgData: data,
                     Dipart: "PreWeddings Images"
                 });
