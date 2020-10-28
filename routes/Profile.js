@@ -40,7 +40,7 @@ Routes.get("/", (req, res) => {
     homeImg.find({}, (err, result) => {
         if (err) {
             res.render("Profile", {
-                login: false,
+                login: true,
                 port: port,
                 status: 1,
                 mass: "Contact Kheni",
@@ -54,7 +54,7 @@ Routes.get("/", (req, res) => {
             });
         } else {
             res.render("Profile", {
-                login: false,
+                login: true,
                 port: port,
                 status: null,
                 count: count,

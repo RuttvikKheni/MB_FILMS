@@ -61,7 +61,9 @@
     </div>
 
     <!-- Img -->
-
+    <div class="mx-auto spinner-border d-none" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 
     <%- include("Footer"); -%>
 
@@ -73,16 +75,18 @@
 
         $('#uploadForm').on('submit', function (e) {
             e.preventDefault();
+            $('.spinner-border').removeClass('d-none')
             const valid = $("#file").val();
             if (valid === "") {
                 $('#imgShow').addClass('d-none');
                 $('#none1').addClass('d-block alert-warning');
+                $('.spinner-border').addClass('d-none')
                 hidemsg("Fill All Detail :( ");
             } else {
-
                 if ($('#imgData').val() == "") {
                     $('#none1').addClass('d-block');
                     $("#imgData").focus()
+                    $('.spinner-border').addClass('d-none')
                     hidemsg("Write Some Discription");
                 } else {
                     $.ajax({
@@ -97,15 +101,19 @@
                                 $('#none1').addClass('d-block alert alert-success');
                                 hidemsg(`Image Upload SuccessFully`);
                                 $("#img").attr('src', "/public/Profile/Home/" + data.imgName);
+                                $('.spinner-border').addClass('d-none')
                                 $('#imgShow').removeClass('d-none');
                             } else {
                                 $('#none1').addClass('d-block alert-danger');
+                                $('.spinner-border').addClass('d-none')
                                 hidemsg(`Image Not Upload(Err:${data.error})`);
                             }
                         }
                     });
+                    $('.spinner-border').addClass('d-none')
                     return true;
                 }
+                $('.spinner-border').addClass('d-none')
                 return false;
             }
         });
