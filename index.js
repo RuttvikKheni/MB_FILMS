@@ -66,7 +66,7 @@ app.use('/contact', CheckAuh, require('./routes/Contact'));
 // })
 
 // APIs
-// app.use('/api', require('./routes/APIs'));
+app.use('/api', require('./routes/APIs'));
 
 
 //--logout Routes--
