@@ -8,9 +8,13 @@
 <body>
     <%- include("Navbar",{login:login}); -%>
 
-    <%- msg %>
-    <button id="submit"></button>
-    <%- include("Footer") -%>
+
+    <div class="col-8 m-5 mx-auto">
+        <%- msg %>
+        <button class="btn btn-primary" id="submit">Back to Home</button>
+    </div>
+
+
 </body>
 <script>
     $("#submit").click(() => window.location.href = "/")

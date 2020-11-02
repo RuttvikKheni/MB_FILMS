@@ -115,48 +115,66 @@ Routes.post('/removeclient', (req, res) => {
 
 
 Routes.post("/addclient", (req, res) => {
-    console.log(req.body);
-    client = new clientDetail({
-        clientName: req.body.clientName,
-        clientData: req.body.clientData == null ? "Data not Found, pls Write Something" : req.body.clientData
-    })
-    console.log(client);
-    client.save((err, data) => {
+
+    fs.mkdir(`./public/Images/Clients/${req.body.clientName}`, (err) => {
         if (err) {
-            console.log(err);
             res.json({
                 status: 0,
-                msg: "*Client Not Added :(",
-                error: err
+                msg: "This Client Alredy Created :( "
             });
-        }
-        else {
-            fs.mkdir(`./public/Images/Clients/${req.body.clientName}`, (err) => {
+        } else {
+            client = new clientDetail({
+                clientName: req.body.clientName,
+                clientData: req.body.clientData == null ? "Data not Found, pls Write Something" : req.body.clientData
+            })
+            client.save((err, data) => {
                 if (err) {
+                    console.log(err);
                     res.json({
                         status: 0,
-                        msg: "*Pls Delete This Client and Try"
+                        msg: "*Client Not Added :( , Try Again",
+                        error: err
                     });
-                } else {
-                    console.log(data);
+                }
+                else {
                     res.json({
                         status: 1,
                         msg: "*Client Added :)"
                     });
                 }
-
             });
         }
-    })
+    });
 });
 
 
 
 Routes.get("/viewImg", (req, res) => {
-    res.render('ViewMoreImg', { login: true });
+    console.log(req.query);
+    fs.readdir(`./public/Images/Clients/${req.query.id}`, (err, files) => {
+        if (err) {
+            res.render('ViewMoreImg', { login: true, status: 0, msg: "Client Not Found" });
+
+        } else {
+            res.render('ViewMoreImg', { login: true, imgPath: "/public/Clients", clientName: req.query.id, imgName: files.map((val) => { return val }) });
+        }
+    });
 });
 
 
+
+
+Routes.post('/DeleteImg', (req, res) => {
+    console.log(req.body);
+    fs.unlink(`./public/Images/Clients/${req.body.ClientName}/${req.body.ImgName}`, (err) => {
+        if (err) {
+            res.json({ status: 0, msg: "Img Alredy Deleted :() " });
+        } else {
+            res.json({ status: 1, msg: "Img Deleted :) " });
+        }
+    });
+
+});
 
 
 //=====upload img Processing=====================

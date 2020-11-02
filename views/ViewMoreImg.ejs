@@ -7,9 +7,68 @@
 
 <body>
     <%- include("Navbar",{login:login}); -%>
-
+    <div class="col-md-11 col-lg-8 col-xl-8 mx-auto">
+        <div>
+            <p style="text-align: center;">__________________________________________</p>
+            <h1 style="text-align: center;">Clients Details</h1>
+            <p style="text-align: center;">__________________________________________</p>
+        </div>
+        <div class="col-6 mx-auto my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none1"
+            role="alert">
+            <strong id="req"></strong>
+        </div>
+        <div>
+            <div class="row">
+                <% imgName.map((val,i)=>{ %>
+                <div class="col-4 p-1 border">
+                    <img class="my-auto m-auto w-100" src="<%- imgPath  %>/<%- clientName  %>/<%- val  %>" alt="Images">
+                    <p style="text-align: center;">
+                        _________________</p>
+                    <a class="btn float-left" target="_blank" href="<%- imgPath  %>/<%- clientName  %>/<%- val  %>"><i
+                            class=" fas fa-binoculars"></i>
+                        See Image</a>
+                    <a class="btn float-right" id="DeleteImg" href="<%-val  %>">Delete Image <i
+                            class="fas fa-trash"></i></a>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
     <%- include("Footer") -%>
 </body>
+<script>
 
+    $(document).ready(function () {
+        $(document).on('click', '#DeleteImg', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "post",
+                url: "/clients/DeleteImg",
+                data: {
+                    ClientName: new URLSearchParams(window.location.search).get('id'),
+                    ImgName: $("#DeleteImg").attr('href')
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == 1) {
+                        window.location.href = window.location.search
+                    } else {
+                        $('#none1').removeClass("alert-success alert-warning").addClass('d-block alert-danger');
+                        $('.spinner-border').addClass('d-none')
+                        hidemsg(data.msg)
+                    }
+                }
+            });
+
+        });
+    });
+    function hidemsg(msg) {
+        $('#req').text(msg);
+        setTimeout(function () {
+            $("#none1").removeClass('d-block');
+        }, 3000);
+    }
+
+</script>
 
 </html>

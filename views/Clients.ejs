@@ -42,7 +42,7 @@
         <div class="my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none1" role="alert">
             <strong id="req"></strong>
         </div>
-        <section class="section-preview border">
+        <section id="imgForm" class="section-preview border">
             <form class="mx-auto md-form my-3" action="" id="uploadForm" method="POST" enctype="multipart/form-data">
                 <div class="mx-auto file-field">
                     <div class="row">
@@ -73,12 +73,8 @@
                             <img class="my-auto m-auto w-100" src="" alt="<%- val %>">
                             <p style="text-align: center;">
                                 _________________</p>
-                            <a class="btn" href="/clients/viewImg?id=<%-val  %>"><i class="fas fa-binoculars"></i>
-                                View
-                                More
-                                Imgs</a>
-                            <a class="btn" href="/clients/deleteImg?id=<%-val  %>">Delete Client <%- val %> <i
-                                    class="fas fa-trash"></i></a>
+                            <a class="btn" href="/clients/viewImg?id=<%-val  %>"><i class="fas fa-binoculars"></i> View
+                                More Imgs</a>
                         </div>
                         <% }) %>
                     </div>
@@ -215,6 +211,8 @@
 
         $('#UploadImg').click((e) => {
             e.preventDefault();
+
+
             if ($('#file').val() == "") {
                 $('#none1').addClass('d-block alert-danger');
                 $('.spinner-border').addClass('d-none')
@@ -241,8 +239,6 @@
                     }
                 });
             }
-
-
             function hidemsg(msg) {
                 $('#req').text(msg);
                 setTimeout(function () {
@@ -250,27 +246,12 @@
                 }, 3000);
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if ($("#witchClient").text() == "") {
+            $("#imgForm").addClass("d-none");
+        } else {
+            $("#imgForm").removeClass("d-none");
+        }
     })
-
-
 </script>
 
 
