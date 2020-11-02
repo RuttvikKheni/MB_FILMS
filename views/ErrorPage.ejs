@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("Header"); -%>
+</head>
+
+<body>
+    <%- include("Navbar",{login:login}); -%>
+
+    <%- msg %>
+    <button id="submit"></button>
+    <%- include("Footer") -%>
+</body>
+<script>
+    $("#submit").click(() => window.location.href = "/")
+</script>
+
+
+</html>

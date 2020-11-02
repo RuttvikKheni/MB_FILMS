@@ -38,7 +38,7 @@ app.use('/public', express.static(path.join(__dirname, 'public/Images')))
 
 
 //--bodyparser--
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //--db--
@@ -59,6 +59,7 @@ app.use('/wedding', CheckAuh, require('./routes/Wedding'));
 app.use('/prewedding', CheckAuh, require('./routes/PreWedding'));
 app.use('/kidsshoots', CheckAuh, require('./routes/KidsShoots'));
 app.use('/familyshoots', CheckAuh, require('./routes/FamilyShoots'));
+app.use('/clients', require('./routes/Clients'));
 app.use('/contact', CheckAuh, require('./routes/Contact'));
 
 // app.use(function (err, req, res, next) {
@@ -76,6 +77,14 @@ app.get('/logout', (req, res) => {
     console.log(req.session.login)
     res.redirect('/');
 });
+app.use(function (err, req, res, next) {
+    if (res.headersSent) {
+        return next(err)
+    }
+    res.status(500)
+    res.render('ErrorPage', { msg: err, login: true })
+})
+
 
 app.listen(port, () => {
     console.log(`your website is Running in http://localhost:${port}/`);

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("Header"); -%>
+</head>
+
+<body>
+    <%- include("Navbar",{login:login}); -%>
+
+    <div class="col-10 col-md-11 col-lg-6 mx-auto">
+
+
+        <div>
+            <p style="text-align: center;">__________________________________________</p>
+            <h1 style="text-align: center;">Clients Details</h1>
+            <p style="text-align: center;">__________________________________________</p>
+        </div>
+
+        <div>
+            <button id="refrashPage" class="btn btn-primery">Refrash Page</button>
+            <button id="addClient" class="btn btn-primery">Add Client</button>
+            <button id="removeClient" class="btn btn-primery">Remove Client</button><input id="clientName" type="text"
+                name="clientName"><span style="color: red;" id="required" class="d-none"></span>
+
+        </div>
+        <div>
+            <div class="column">
+                <div class="">
+                    <select class=" form-control form-control-lg" id="Clients">
+                        <% Clients.map((Client,i)=>{ %>
+                        <option value="<%- Client.clientName %>"><%- Client.clientName %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Clients discription :- </label>
+                    <textarea class="form-control" id="discription" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="my-3 py-3 alert alert-warning alert-dismissible fade show d-none" id="none1" role="alert">
+            <strong id="req"></strong>
+        </div>
+        <section class="section-preview border">
+            <form class="mx-auto md-form my-3" action="" id="uploadForm" method="POST" enctype="multipart/form-data">
+                <div class="mx-auto file-field">
+                    <div class="row">
+                        <div class="btn btn-primary btn-sm float-left waves-effect waves-light">
+                            <span id="witchClient"></span>
+                            <input class="d-none" readonly id="cn" type="text" name="cn">
+                            <input type="file" class="imgCon" id="file" name="file">
+                        </div>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input readonly class="file-path validate valid" value="" type="text"
+                            placeholder="Upload your file">
+                    </div>
+                </div><br>
+                <div class="ml-5">
+                    <input type="button" class="px-3 btn btn-primary" id="UploadImg">
+                </div>
+            </form>
+        </section>
+        <div>
+            <h2 style="text-align: center;">
+                -=-=-=-=-=-=-=- Your Client's -=-=-=-=-=-=-=-</h2>
+            <div>
+                <div class="col-12 mx-auto">
+                    <div class="row">
+                        <% clientCounts.map((val,i)=>{ %>
+                        <div class="col-4 p-1 border">
+                            <img class="my-auto m-auto w-100" src="" alt="<%- val %>">
+                            <p style="text-align: center;">
+                                _________________</p>
+                            <a class="btn" href="/clients/viewImg?id=<%-val  %>"><i class="fas fa-binoculars"></i>
+                                View
+                                More
+                                Imgs</a>
+                            <a class="btn" href="/clients/deleteImg?id=<%-val  %>">Delete Client <%- val %> <i
+                                    class="fas fa-trash"></i></a>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include("Footer") -%>
+</body>
+<script>
+
+    $(document).ready(function () {
+
+        $(" #refrashPage").click(() => window.location.href = "./clients")
+        $('#witchClient').text($('#Clients').val())
+        $('#UploadImg').val("Upload img to This Client :- " + $('#Clients').val())
+        $('#cn').attr('value', `${$('#Clients').val()}`);
+
+        $(".imgCon").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(".valid").addClass("selected").val(fileName);
+        });
+
+        $.ajax({
+            method: "post",
+            url: "/clients/getdiscript",
+            data: {
+                clientName: $('#Clients').val()
+            },
+            success: function (data) {
+                $('#discription').val(data.msg)
+            }
+        })
+        $("#Clients").change(function () {
+            $('#cn').attr('value', `${$('#Clients').val()}`);
+            $.ajax({
+                method: "post",
+                url: "/clients/getdiscript",
+                data: {
+                    clientName: $('#Clients').val()
+                },
+                success: function (data) {
+                    $('#discription').val(data.msg)
+                    $('#witchClient').text($('#Clients').val())
+                    $('#UploadImg').val("Upload img to This Client :- " + $('#Clients').val())
+                }
+            })
+        })
+        $('#discription').keyup(() => { $("#discription").css("border-color", "black") })
+        $('#discription').change(function () {
+            let discript = $(this).val();
+            if (discript.length >= 50) {
+                $.ajax({
+                    method: "post",
+                    url: "/clients/setdiscript",
+                    data: {
+                        clientName: $('#Clients').val(),
+                        clientData: $("#discription").val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.status == 0) {
+                            setInterval(() => {
+                                $('#discription').css("border-color", "red")
+                            }, 0);
+                        } else {
+                            setInterval(() => {
+                                $('#discription').css("border-color", "green")
+                            }, 0);
+                        }
+                    }
+                })
+            } else {
+                $("#discription").css("border-color", "red")
+                console.log("50 must");
+            }
+
+
+        });
+
+        $('#clientName').keypress(() => $('#required').addClass('d-none'))
+
+        $('#removeClient').click(function () {
+            let text = $('#clientName').val()
+            if (text == "") {
+                $('#required').removeClass('d-none').text("*Required").css("color", "red");
+            } else {
+                $.ajax({
+                    method: "post",
+                    url: "/clients/removeclient",
+                    data: {
+                        clientName: $('#clientName').val()
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        console.log(res.msg);
+                        if (res.status == 0) {
+                            $('#required').removeClass('d-none').text(res.msg).css("color", "red");
+                        } else {
+                            $('#required').removeClass('d-none').text(res.msg).css("color", "green");
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#addClient').click(function () {
+            let text = $('#clientName').val()
+            if (text == "") {
+                $('#required').removeClass('d-none').text("*Required").css("color", "red");
+            } else {
+                $.ajax({
+                    method: "post",
+                    url: "/clients/addclient",
+                    data: {
+                        clientName: $('#clientName').val(),
+                        clientData: $('#discription').val(),
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        console.log(res.msg);
+                        if (res.status == 0) {
+                            $('#required').removeClass('d-none').text(res.msg).css("color", "red");
+                        } else {
+                            $('#required').removeClass('d-none').text(res.msg).css("color", "green");
+                        }
+                    }
+                });
+            }
+        });
+
+        //===================upload img in clinet folder======
+
+        $('#UploadImg').click((e) => {
+            e.preventDefault();
+            if ($('#file').val() == "") {
+                $('#none1').addClass('d-block alert-danger');
+                $('.spinner-border').addClass('d-none')
+                hidemsg("Select Image :( ")
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: "/clients/addImg",
+                    enctype: 'multipart/form-data',
+                    data: new FormData(document.getElementById('uploadForm')),
+                    dataType: "JSON",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.status == "1") {
+                            $('#none1').removeClass('alert-danger alert-warning').addClass('d-block alert-success');
+                            $('.spinner-border').addClass('d-none')
+                            hidemsg(data.msg)
+                        } else {
+                            $('#none1').addClass('d-block alert-danger');
+                            $('.spinner-border').addClass('d-none')
+                            hidemsg(data.msg)
+                        }
+                    }
+                });
+            }
+
+
+            function hidemsg(msg) {
+                $('#req').text(msg);
+                setTimeout(function () {
+                    $("#none1").removeClass('d-block');
+                }, 3000);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    })
+
+
+</script>
+
+
+</html>
