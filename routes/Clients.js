@@ -86,17 +86,16 @@ Routes.post('/setdiscript', (req, res) => {
 
 
 Routes.post('/removeclient', (req, res) => {
-    console.log(req.body);
-
-    clientDetail.findOneAndDelete({ clientName: req.body.clientName }, (err, result) => {
-        if (err || result == null) {
+    fs.unlink(`./public/Images/Clients/${req.body.clientName}`, (err) => {
+        if (err) {
+            console.log(err);
             obj = {}
             obj['status'] = 0;
             obj['msg'] = "*Client Not Found,Pls valid ClientName";
             res.end(JSON.stringify(obj));
         } else {
-            fs.rmdir(`./public/Images/Clients/${req.body.clientName}`, (err) => {
-                if (err) {
+            clientDetail.findOneAndDelete({ clientName: req.body.clientName }, (err, result) => {
+                if (err || result == null) {
                     obj = {}
                     obj['status'] = 0;
                     obj['msg'] = "*Client Not Found,Pls valid ClientName";
@@ -107,9 +106,9 @@ Routes.post('/removeclient', (req, res) => {
                     obj['msg'] = "*Client Removed";
                     res.end(JSON.stringify(obj));
                 }
-            });
+            })
         }
-    })
+    });
 });
 
 
@@ -174,6 +173,25 @@ Routes.post('/DeleteImg', (req, res) => {
         }
     });
 
+});
+
+
+Routes.post('/deleteClient', (req, res) => {
+
+    fs.unlink(`./public/Images/Clients/${req.body.clientName}`, (err) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                status: 0,
+                msg: "Contact Kheni",
+            });
+        } else {
+            res.json({
+                status: 0,
+                msg: "Clients Deleted",
+            });
+        }
+    });
 });
 
 

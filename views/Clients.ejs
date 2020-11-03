@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-    <%- include("Header"); -%>
+    <%- include("partials/Header"); -%>
 </head>
 
 <body>
-    <%- include("Navbar",{login:login}); -%>
+    <%- include("partials/Navbar",{login:login}); -%>
 
     <div class="col-10 col-md-11 col-lg-6 mx-auto">
 
@@ -75,6 +75,8 @@
                                 _________________</p>
                             <a class="btn" href="/clients/viewImg?id=<%-val  %>"><i class="fas fa-binoculars"></i> View
                                 More Imgs</a>
+                            <button class="btn" type="button" id="deleteClient" value="<%-val  %>">deleteClient
+                                <%-val  %></button>
                         </div>
                         <% }) %>
                     </div>
@@ -83,7 +85,7 @@
         </div>
     </div>
 
-    <%- include("Footer") -%>
+    <%- include("partials/Footer") -%>
 </body>
 <script>
 
@@ -251,6 +253,21 @@
         } else {
             $("#imgForm").removeClass("d-none");
         }
+
+
+        $(document).on("click", '#deleteClient', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "post",
+                url: "/clients/deleteClient",
+                data: { clientName: e.target.value },
+                dataType: "JSON",
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+
+        });
     })
 </script>
 
