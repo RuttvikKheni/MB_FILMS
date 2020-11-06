@@ -3,12 +3,13 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 var session = require('express-session')
 const app = express();
 
 // config file
 const { port, secret } = require('./config/config');
-
+app.use(cors());
 // session
 app.use(session({
     secret: secret,
