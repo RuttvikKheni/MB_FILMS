@@ -13,7 +13,7 @@ Routes.get('/about', (req, res) => {
         console.log(err, files);
         obj = [];
         obj = files.map((val, i) => {
-            return `http://localhost:3000/public/Profile/Admin/${val}`;
+            return `/public/Profile/Admin/${val}`;
         })
         res.send(obj);
     });
