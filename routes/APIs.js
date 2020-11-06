@@ -110,22 +110,26 @@ Routes.get('/clients', (req, res) => {
 
 
 
-Routes.get('/clients/:client', (req, res) => {
-    fs.readdir(`./public/Clients/${req.params.client}`, (err, files) => {
+Routes.get('/clients/:clientName', (req, res) => {
+
+    console.log(req.params);
+    fs.readdir(`./public/Images/Clients/${req.params.clientName}`, async (err, files) => {
         if (!err) {
-            fs.readFile(`./data/${req.params.client}Data.txt`, 'utf-8', (err, data) => {
-                if (!err) {
-                    res.json({
-                        type: req.params.type,
-                        discription: data,
-                        imgs: files.map((val) => {
-                            return `/public/${req.params.type}/${val}`;
-                        })
-                    });
-                }
-            });
+            obj = {
+                clientName: req.params.clientName,
+                discription: "",
+                imgs: files.map((val) => { return `/public/Clients/${req.params.clientName}/${val}` })
+            }
+            const desc = await clientDetail.findOne({ clientName: req.params.clientName });
+            if (desc) {
+                obj.discription = desc.clientData;
+            }
+            res.json(obj);
         }
+        res.end("error");
     });
+
+
 });
 
 
