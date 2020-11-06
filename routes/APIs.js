@@ -1,3 +1,4 @@
+const e = require('express');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -71,78 +72,40 @@ Routes.get('/photography/:type', (req, res) => {
             });
         }
     });
-    // res.end("hello");
 });
 
 
 
 Routes.get('/clients', (req, res) => {
 
+    fs.readdir('./public/Images/Clients/', async (err, files) => {
+        let obj = [];
+        obj = files;
 
-    fs.readdir('./public/Images/Clients/', (err, files) => {
-        if (!err) {
-            // var options = [];
-            // files.forEach(function (val) {
-            //     fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
-            //         options.push({ clients: val, images: file, description: "description" });
-            //     });
-            // });
-            // console.log(options);
+        obj = await Promise.all(obj.map(async (val, i) => {
+            val = {
+                clientId: i,
+                clientName: val,
+                discription: "",
+                imgs: []
+            }
 
-            var arr = [];
-            var obj = {};
-            files.forEach(function (val) {
-                fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
-                    obj = { clients: val, images: file, description: "description" };
-                    arr.push(obj);
-                });
+            const desc = await clientDetail.findOne({ clientName: val.clientName });
+
+            if (desc) {
+                val.discription = desc.clientData;
+            }
+
+            val.imgs = fs.readdirSync(`./public/Images/Clients/${val.clientName}`).map((vall) => {
+                return `/public/Clients/${val.clientName}/${vall}`;
             });
+            return val;
 
-            console.log(arr);
+        }));
 
-
-
-            // files.map((val, i) => {
-            //     arr = {};
-            //     fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
-            //         arr['clients'] = val;
-            //         arr['images'] = file;
-            //         arr['description'] = "Description";
-            //     });
-            //     console.log(arr);
-            //     obj.push(arr);
-            // });
-            // console.log(obj);
-        }
+        res.send(JSON.stringify(obj));
     });
 
-
-    res.end('helo');
-    // fs.readdir('./public/Images/Clients/', (err, files) => {
-    //     if (!err) {
-    //         let obj = [];
-    //         obj = files.map((val, i) => {
-    //             val = {
-    //                 clientId: i,
-    //                 clientName: val,
-    //                 discription: "",
-    //                 imgs: []
-    //             }
-    //             clientDetail.find({ clientName: val }, (err, data) => {
-    //                 console.log(data);
-    //                 return data.clientDetail;
-    //             });
-    //             fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
-    //                 file.map((vall) => {
-    //                     return `/public/Clients/${val}/${vall}`;
-    //                 });
-    //             });
-    //             console.log(val);
-    //             return val;
-    //         });
-    //         // res.json(obj);
-    //     }
-    // });
 });
 
 
