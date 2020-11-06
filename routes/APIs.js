@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Routes = express.Router();
 
+const clientDetail = require('./../models/ClientDetail');
 
 // Routes.get('/profile', (req, res) => { });
 
@@ -17,83 +18,151 @@ Routes.get('/about', (req, res) => {
     });
 });
 
-Routes.get('/photography', (req, res) => {
+Routes.get('/photography', async (req, res) => {
 
     let obj = [
         {
-            type: "Weddings",
-            discription: "It's Weddings Images Weddings Images",
-            imgs: ["https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://www.irdes.fr/imgs2017/images/about-imgs.jpg",]
+            type: "Wedding",
+            discription: "",
+            imgs: []
         }, {
-            type: "PreWeddings",
-            discription: "It's PreWeddings Images PreWeddings Images",
-            imgs: ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
+            type: "PreWedding",
+            discription: "",
+            imgs: []
         }, {
             type: "KidsShoots",
-            discription: "It's KidsShoots KidsShoots",
-            imgs: ["https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://www.irdes.fr/imgs2017/images/about-imgs.jpg",]
+            discription: "",
+            imgs: []
         }, {
             type: "FamilyShoots",
-            discription: "It's FamilyShoots FamilyShoots",
-            imgs: ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
+            discription: "",
+            imgs: []
         }
     ];
-    res.end(JSON.stringify(obj));
 
+
+    const data = obj.map((val, i) => {
+        val.discription = fs.readFileSync('./data/' + val.type + 'Data.txt', 'utf-8');
+        if (val.discription) {
+            val.imgs = fs.readdirSync('./public/Images/' + val.type).map((vall) => {
+                return `/public/${val.type}/${vall}`;
+            });
+        }
+        return val;
+    });
+    res.json(data); 0
 });
 
 
 Routes.get('/photography/:type', (req, res) => {
-
-    let obj = {};
-    obj['type'] = req.params.type
-    obj['discription'] = `It's ${req.params.type} Images ${req.params.type} Images`
-    obj['imgs'] = ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
-    res.end(JSON.stringify(obj));
-
+    console.log(req.params);
+    fs.readdir(`./public/Images/${req.params.type}`, (err, files) => {
+        if (!err) {
+            fs.readFile(`./data//${req.params.type}Data.txt`, 'utf-8', (err, data) => {
+                if (!err) {
+                    res.json({
+                        type: req.params.type,
+                        discription: data,
+                        imgs: files.map((val) => {
+                            return `/public/${req.params.type}/${val}`;
+                        })
+                    });
+                }
+            });
+        }
+    });
+    // res.end("hello");
 });
 
 
 
 Routes.get('/clients', (req, res) => {
 
-    let obj = [
-        {
-            clientId: 1,
-            clientName: "Weddings",
-            discription: "It's Weddings Images Weddings Images",
-            imgs: ["https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://www.irdes.fr/imgs2017/images/about-imgs.jpg",]
-        }, {
-            clientId: 2,
-            clientName: "PreWeddings",
-            discription: "It's PreWeddings Images PreWeddings Images",
-            imgs: ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
-        }, {
-            clientId: 3,
-            clientName: "KidsShoots",
-            discription: "It's KidsShoots KidsShoots",
-            imgs: ["https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg", "https://www.irdes.fr/imgs2017/images/about-imgs.jpg",]
-        }, {
-            clientId: 4,
-            clientName: "FamilyShoots",
-            discription: "It's FamilyShoots FamilyShoots",
-            imgs: ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
-        }
-    ];
-    res.end(JSON.stringify(obj));
 
+    fs.readdir('./public/Images/Clients/', (err, files) => {
+        if (!err) {
+            // var options = [];
+            // files.forEach(function (val) {
+            //     fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
+            //         options.push({ clients: val, images: file, description: "description" });
+            //     });
+            // });
+            // console.log(options);
+
+            var arr = [];
+            var obj = {};
+            files.forEach(function (val) {
+                fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
+                    obj = { clients: val, images: file, description: "description" };
+                    arr.push(obj);
+                });
+            });
+
+            console.log(arr);
+
+
+
+            // files.map((val, i) => {
+            //     arr = {};
+            //     fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
+            //         arr['clients'] = val;
+            //         arr['images'] = file;
+            //         arr['description'] = "Description";
+            //     });
+            //     console.log(arr);
+            //     obj.push(arr);
+            // });
+            // console.log(obj);
+        }
+    });
+
+
+    res.end('helo');
+    // fs.readdir('./public/Images/Clients/', (err, files) => {
+    //     if (!err) {
+    //         let obj = [];
+    //         obj = files.map((val, i) => {
+    //             val = {
+    //                 clientId: i,
+    //                 clientName: val,
+    //                 discription: "",
+    //                 imgs: []
+    //             }
+    //             clientDetail.find({ clientName: val }, (err, data) => {
+    //                 console.log(data);
+    //                 return data.clientDetail;
+    //             });
+    //             fs.readdir(`./public/Images/Clients/${val}`, (error, file) => {
+    //                 file.map((vall) => {
+    //                     return `/public/Clients/${val}/${vall}`;
+    //                 });
+    //             });
+    //             console.log(val);
+    //             return val;
+    //         });
+    //         // res.json(obj);
+    //     }
+    // });
 });
 
 
 
 Routes.get('/clients/:client', (req, res) => {
-
-    let obj = {};
-    obj['type'] = req.params.type
-    obj['discription'] = `It's ${req.params.type} Images ${req.params.type} Images`
-    obj['imgs'] = ["https://www.imgacademy.com/themes/custom/imgacademy/images/helpbox-contact.jpg", "https://restaurant-table-des-faubourgs.com/assets/components/tdf/js/fullPage-master/examples/imgs/bg3.jpg",]
-    res.end(JSON.stringify(obj));
-
+    fs.readdir(`./public/Clients/${req.params.client}`, (err, files) => {
+        if (!err) {
+            fs.readFile(`./data/${req.params.client}Data.txt`, 'utf-8', (err, data) => {
+                if (!err) {
+                    res.json({
+                        type: req.params.type,
+                        discription: data,
+                        imgs: files.map((val) => {
+                            return `/public/${req.params.type}/${val}`;
+                        })
+                    });
+                }
+            });
+        }
+    });
 });
 
 

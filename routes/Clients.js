@@ -86,29 +86,47 @@ Routes.post('/setdiscript', (req, res) => {
 
 
 Routes.post('/removeclient', (req, res) => {
-    fs.unlink(`./public/Images/Clients/${req.body.clientName}`, (err) => {
-        if (err) {
-            console.log(err);
+    rimraf('./public/Images/Clients/' + req.body.clientName);
+    clientDetail.findOneAndDelete({ clientName: req.body.clientName }, (err, result) => {
+        if (err || result == null) {
             obj = {}
             obj['status'] = 0;
             obj['msg'] = "*Client Not Found,Pls valid ClientName";
             res.end(JSON.stringify(obj));
         } else {
-            clientDetail.findOneAndDelete({ clientName: req.body.clientName }, (err, result) => {
-                if (err || result == null) {
-                    obj = {}
-                    obj['status'] = 0;
-                    obj['msg'] = "*Client Not Found,Pls valid ClientName";
-                    res.end(JSON.stringify(obj));
-                } else {
-                    obj = {}
-                    obj['status'] = 1;
-                    obj['msg'] = "*Client Removed";
-                    res.end(JSON.stringify(obj));
-                }
-            })
+            obj = {}
+            obj['status'] = 1;
+            obj['msg'] = "*Client Removed";
+            res.end(JSON.stringify(obj));
         }
-    });
+    })
+    res.json({
+        status: 200,
+        message: 'ok',
+    })
+    // rimraf((path.resolve(__dirname, '../public/Images/Clients/', req.body.clientName)));
+
+    // if (err) {
+    //     obj = {}
+    //     obj['status'] = 0;
+    //     obj['msg'] = "*Client Not Found,Pls valid ClientName";
+    //     res.end(JSON.stringify(obj));
+    // } else {
+    clientDetail.findOneAndDelete({ clientName: req.body.clientName }, (err, result) => {
+        if (err || result == null) {
+            obj = {}
+            obj['status'] = 0;
+            obj['msg'] = "*Client Not Found,Pls valid ClientName";
+            res.end(JSON.stringify(obj));
+        } else {
+            obj = {}
+            obj['status'] = 1;
+            obj['msg'] = "*Client Removed";
+            res.end(JSON.stringify(obj));
+        }
+    })
+    // }
+
 });
 
 
@@ -177,8 +195,7 @@ Routes.post('/DeleteImg', (req, res) => {
 
 
 Routes.post('/deleteClient', (req, res) => {
-
-    fs.unlink(`./public/Images/Clients/${req.body.clientName}`, (err) => {
+    fs.rmdir(path.resolve(path.cwd(), 'public/Images/Clients/', req.body.clientName), (err) => {
         if (err) {
             console.log(err);
             res.json({
@@ -221,7 +238,19 @@ Routes.post('/addImg', (req, res) => {
 });
 
 
-
+function rimraf(dir_path) {
+    if (fs.existsSync(dir_path)) {
+        fs.readdirSync(dir_path).forEach(function (entry) {
+            var entry_path = path.join(dir_path, entry);
+            if (fs.lstatSync(entry_path).isDirectory()) {
+                rimraf(entry_path);
+            } else {
+                fs.unlinkSync(entry_path);
+            }
+        });
+        fs.rmdirSync(dir_path);
+    }
+}
 
 
 module.exports = Routes;
