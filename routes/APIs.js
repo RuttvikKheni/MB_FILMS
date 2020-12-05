@@ -5,6 +5,7 @@ const path = require('path');
 const Routes = express.Router();
 
 const clientDetail = require('./../models/ClientDetail');
+const homeImg = require('./../models/HomeImg');
 
 // Routes.get('/profile', (req, res) => { });
 
@@ -129,6 +130,14 @@ Routes.get('/clients/:clientName', (req, res) => {
         res.end("error");
     });
 
+
+});
+
+Routes.get('/sliderImg', (req, res) => {
+
+    homeImg.find({}, (err, data) => {
+        res.send(JSON.stringify(data));
+    });
 
 });
 

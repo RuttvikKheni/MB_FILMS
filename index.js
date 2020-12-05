@@ -60,7 +60,7 @@ app.use('/wedding', CheckAuh, require('./routes/Wedding'));
 app.use('/prewedding', CheckAuh, require('./routes/PreWedding'));
 app.use('/kidsshoots', CheckAuh, require('./routes/KidsShoots'));
 app.use('/familyshoots', CheckAuh, require('./routes/FamilyShoots'));
-app.use('/clients', require('./routes/Clients'));
+app.use('/clients', CheckAuh, require('./routes/Clients'));
 app.use('/contact', CheckAuh, require('./routes/Contact'));
 
 // app.use(function (err, req, res, next) {
